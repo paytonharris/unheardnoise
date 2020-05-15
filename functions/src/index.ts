@@ -21,12 +21,14 @@ export const createnoise = functions.https.onRequest((request, response) => {
       let album = request.body.album || 'The Academy in Peril';
       let genre = request.body.genre || 'Rock';
       let rating = request.body.rating || 6;
+      let randomNumber = getRandomInt(50000);
   
       let data = {
         artist: artist,
         album: album,
         genre: genre,
-        rating: rating
+        rating: rating,
+        randomNumber: randomNumber
       };
 
       const artistEncoded = artist.replace(/\s/g, '+');
@@ -46,16 +48,16 @@ export const createnoise = functions.https.onRequest((request, response) => {
     }
   } else {
     let newalbums = db.collection('newalbums');
-    newalbums.get()
+    newalbums.where('randomNumber', '<=', getRandomInt(50000)).orderBy('randomNumber', 'desc').limit(1).get()
     .then((snapshot: any) => {
 
-      let myString = '';
       let queryString = '';
 
       snapshot.forEach((doc: any) => {
-        myString += JSON.stringify(doc.data());
         queryString = `${doc.data().artist} ${doc.data().album}`;
       });
+
+      console.log(queryString);
 
       const promiseData = getYoutubeVideoForKeyword(queryString);
       promiseData.then(data => {
@@ -77,3 +79,7 @@ const getYoutubeVideoForKeyword = async (keyword: string) => {
 
   return axios.get(`https://www.googleapis.com/youtube/v3/search?part=snippet&q=${encodeURIComponent(keyword)}&key=${youtubeApiKey}`);
 };
+
+function getRandomInt(max: number) {
+  return Math.floor(Math.random() * Math.floor(max));
+}
