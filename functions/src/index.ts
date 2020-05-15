@@ -1,6 +1,8 @@
 import * as functions from 'firebase-functions';
-const admin = require('firebase-admin');  
+const axios = require('axios');
+const admin = require('firebase-admin');
 admin.initializeApp();
+import { youtubeApiKey } from './secureKeys';
 
 let db = admin.firestore();
 
@@ -48,13 +50,30 @@ export const createnoise = functions.https.onRequest((request, response) => {
     .then((snapshot: any) => {
 
       let myString = '';
+      let queryString = '';
 
       snapshot.forEach((doc: any) => {
         myString += JSON.stringify(doc.data());
+        queryString = `${doc.data().artist} ${doc.data().album}`;
       });
 
-      response.statusCode = 200;
-      response.send(myString);
+      const promiseData = getYoutubeVideoForKeyword(queryString);
+      promiseData.then(data => {
+        const videoLink = `https://www.youtube.com/watch?v=${data.data.items[0].id.videoId}`;
+        response.statusCode = 200;
+        response.send(videoLink);
+      })
+      .catch(e => {
+        console.log(e);
+        response.statusCode = 500;
+        response.send("Something went wrong");
+      });
     });
   }
 });
+
+const getYoutubeVideoForKeyword = async (keyword: string) => {
+  console.log(encodeURIComponent(keyword));
+
+  return axios.get(`https://www.googleapis.com/youtube/v3/search?part=snippet&q=${encodeURIComponent(keyword)}&key=${youtubeApiKey}`);
+};
