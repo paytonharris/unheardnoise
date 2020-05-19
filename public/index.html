@@ -19,7 +19,7 @@
       var player;
       function onYouTubeIframeAPIReady() {
 
-        fetch('http://localhost:5001/unheardnoise/us-central1/createnoise')
+        fetch('https://us-central1-unheardnoise.cloudfunctions.net/createnoise')
         .then(response => response.text())
         .then(data => {
           console.log(data);
