@@ -72,7 +72,7 @@ export const createnoise = functions.https.onRequest((request, response) => {
 const getYoutubeVideoForKeyword = async (keyword: string) => {
   console.log(encodeURIComponent(keyword));
 
-  return axios.get(`https://www.googleapis.com/youtube/v3/search?part=snippet&q=${encodeURIComponent(keyword)}&key=${youtubeApiKey}&type=video`);
+  return axios.get(`https://www.googleapis.com/youtube/v3/search?part=snippet&q=${encodeURIComponent(keyword)}&key=${youtubeApiKey}&type=video&maxResults=1`);
 };
 
 function getRandomInt(max: number) {
