@@ -16,7 +16,6 @@ let styles = {
   },
   divStyle: {
     display: 'flex',
-    flex: 1,
     flexDirection: 'column',
     alignItems: 'center',
     justifyContent: 'center',
@@ -25,12 +24,8 @@ let styles = {
     border: 'none',
     width: 350,
     marginHorizontal: '10px',
-    shadowColor: '#000',
-    shadowOffset: { width: 2, height: 2 },
-    shadowOpacity: 0.8,
-    shadowRadius: 5,
-    elevation: 1,
-    height: 90,
+    borderRadius: 50,
+    boxShadow: '0px 5px 20px gray',
   },
   divStyleOver: {
     backgroundColor: 'white',
@@ -54,8 +49,8 @@ class DiamondButton extends React.Component {
       <div
         onMouseEnter={this.handleBoxToggle}
         onMouseLeave={this.handleBoxToggle}
-        className="cutCorners"
-        style={{ width: 350, height: 90 }}
+        // className="cutCorners"
+        style={{ width: 350, height: 70 }}
       >
         <button onClick={this.props.onClick} style={{ ...styles.divStyle, ...(this.state.showBox ? styles.divStyleOut : styles.divStyleOver) }}>
           <label style={{ ...styles.labelStyle, ...(this.state.showBox ? styles.labelStyleOut : styles.labelStyleOver) }}>
