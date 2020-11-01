@@ -1,59 +1,44 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <link rel="shortcut icon" href="%PUBLIC_URL%/greenbean.png" />
+    <meta name="viewport" content="minimum-scale=1, initial-scale=1, width=device-width" />
+    <meta name="theme-color" content="#000000" />
+
+    <link rel="manifest" href="%PUBLIC_URL%/manifest.json">
+    
+    <title>Unheard Noise</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap" />
+    <link href="https://fonts.googleapis.com/css?family=VT323&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500&display=swap" rel="stylesheet"> 
+    <link href="../src/styles.css" type="text/css" rel="stylesheet"/>
+  </head>
   <body>
-    <!-- 1. The <iframe> (and video player) will replace this <div> tag. -->
-    <div id="player"></div>
-
-    <script>
-      // 2. This code loads the IFrame Player API code asynchronously.
-      var tag = document.createElement('script');
-
-      tag.src = "https://www.youtube.com/iframe_api";
-      var firstScriptTag = document.getElementsByTagName('script')[0];
-      firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
-
-      
-
-      // 3. This function creates an <iframe> (and YouTube player)
-      //    after the API code downloads.
-      var player;
-      function onYouTubeIframeAPIReady() {
-
-        fetch('https://us-central1-unheardnoise.cloudfunctions.net/createnoise')
-        .then(response => response.text())
-        .then(data => {
-          console.log(data);
-
-          player = new YT.Player('player', {
-            height: '390',
-            width: '640',
-            videoId: data,
-            events: {
-              'onReady': onPlayerReady,
-              'onStateChange': onPlayerStateChange
-            }
-          });
-        })
-      }
-
-      // 4. The API will call this function when the video player is ready.
-      function onPlayerReady(event) {
-        event.target.playVideo();
-      }
-
-      // 5. The API calls this function when the player's state changes.
-      //    The function indicates that when playing a video (state=1),
-      //    the player should play for six seconds and then stop.
-      var done = false;
-      function onPlayerStateChange(event) {
-        if (event.data == YT.PlayerState.PLAYING && !done) {
-          //setTimeout(stopVideo, 6000);
-          done = true;
-        }
-      }
-      function stopVideo() {
-        player.stopVideo();
-      }
-    </script>
+    <noscript>You need to enable JavaScript to run this app.</noscript>
+    <div id="root"></div>
+    
   </body>
+  <style>
+    .wrapper, html, body {
+      height: 100%;
+      margin: 0;
+      background-color: white;
+    }
+    .cutCorners {
+      --notchSize: 45px;
+      
+      clip-path: 
+        polygon(
+          0% var(--notchSize), 
+          var(--notchSize) 0%, 
+          calc(100% - var(--notchSize)) 0%, 
+          100% var(--notchSize), 
+          100% calc(100% - var(--notchSize)), 
+          calc(100% - var(--notchSize)) 100%, 
+          var(--notchSize) 100%, 
+          0% calc(100% - var(--notchSize))
+        );
+    }
+  </style>
 </html>
