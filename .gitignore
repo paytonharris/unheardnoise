@@ -66,3 +66,6 @@ node_modules/
 
 # api keys
 secureKeys.ts
+
+# builds
+build/
