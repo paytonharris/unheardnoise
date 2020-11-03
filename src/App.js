@@ -67,7 +67,11 @@ export default class App extends Component {
           <ReactPlayer
             url={this.state.videoToPlay ? `https://youtube.com/watch?v=${this.state.videoToPlay}` : null}
             playing={true}
-            style={{ margin: 50, marginBottom: 100, maxWidth: this.state.width }}
+            style={{
+              margin: this.state.height < 710 ? 10 : 50,
+              marginBottom: this.state.height < 710 ? 20 : 100,
+              maxWidth: this.state.width
+            }}
             controls={true}
           />
         }
