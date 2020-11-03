@@ -51,10 +51,19 @@ class DiamondButton extends React.Component {
         onMouseEnter={this.handleBoxToggle}
         onMouseLeave={this.handleBoxToggle}
         // className="cutCorners"
-        style={{ width: 350, height: 50 }}
+        style={{ width: 350, height: 50, maxWidth: this.props.screenWidth - 70 }}
       >
-        <button onClick={this.props.onClick} style={{ ...styles.divStyle, ...(this.state.showBox ? styles.divStyleOut : styles.divStyleOver) }}>
-          <label style={{ ...styles.labelStyle, ...(this.state.showBox ? styles.labelStyleOut : styles.labelStyleOver) }}>
+        <button
+          onClick={this.props.onClick}
+          style={{ ...styles.divStyle, maxWidth: this.props.screenWidth - 70, ...(this.state.showBox ? styles.divStyleOut : styles.divStyleOver)}}
+        >
+          <label
+            style={{
+              ...styles.labelStyle,
+              fontSize: this.props.screenWidth < 600 ? '20px' : '36px',
+              ...(this.state.showBox ? styles.labelStyleOut : styles.labelStyleOver)
+            }}
+          >
             {this.props.children}
           </label>
         </button>

@@ -9,10 +9,27 @@ export default class App extends Component {
     gradient1: 0xEE7171,
     gradient2: 0x7176EE,
     errorText: '',
+    width: 0,
+    height: 0
   };
+  
+  updateWindowDimensions() {
+    this.setState({ width: window.innerWidth, height: window.innerHeight });
+  }
 
   constructor(props) {
     super(props);
+
+    this.updateWindowDimensions = this.updateWindowDimensions.bind(this);
+  }
+
+  componentDidMount() {
+    this.updateWindowDimensions();
+    window.addEventListener('resize', this.updateWindowDimensions);
+  }
+  
+  componentWillUnmount() {
+    window.removeEventListener('resize', this.updateWindowDimensions);
   }
 
   getVideo = () => {
@@ -30,11 +47,19 @@ export default class App extends Component {
   }
 
   render() {
+    const titleFontSize = this.state.width < 600 ? '30px' : '48px';
+
     return (
       <div style={styles.body}>
         <div style={this.state.videoPlaying ? { ...styles.background, opacity: 1.0 } : styles.background} />
 
-        <p style={this.state.videoPlaying ? { ...styles.title, color: '#71EEEE' } : styles.title}>
+        <p style={this.state.videoPlaying
+          ? 
+            { ...styles.title, color: '#71EEEE', fontSize: titleFontSize }
+          : 
+            { ...styles.title, fontSize: titleFontSize }
+          }
+        >
           UNHEARD NOISE
         </p>
 
@@ -42,7 +67,7 @@ export default class App extends Component {
           <ReactPlayer
             url={this.state.videoToPlay ? `https://youtube.com/watch?v=${this.state.videoToPlay}` : null}
             playing={true}
-            style={{ margin: 50, marginBottom: 100 }}
+            style={{ margin: 50, marginBottom: 100, maxWidth: this.state.width }}
             controls={true}
           />
         }
@@ -50,7 +75,7 @@ export default class App extends Component {
         {this.state.errorText && 
           <p style={styles.error}>{this.state.errorText}</p>
         }
-        <DiamondButton onClick={() => this.getVideo()}>
+        <DiamondButton screenWidth={this.state.width} onClick={() => this.getVideo()}>
           {this.state.videoPlaying ? 'Discover More' : 'Discover'}
         </DiamondButton>
       </div>
