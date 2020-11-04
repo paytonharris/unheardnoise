@@ -108,10 +108,12 @@ export default class App extends Component {
   getVideo = () => {
     this.setState({ videoPlaying: true });
 
-    setTimeout(() => {
-      this.startNextColor();
-      this.setState({ gradientMoving: true })
-    }, 7000);
+    if (!this.state.gradientMoving) {
+      setTimeout(() => {
+        this.startNextColor();
+        this.setState({ gradientMoving: true })
+      }, 7000);
+    }
     
     fetch('https://us-central1-unheardnoise.cloudfunctions.net/createnoise')
     .then(response => response.text())
@@ -155,7 +157,8 @@ export default class App extends Component {
           UNHEARD NOISE
         </p>
 
-        {this.state.videoPlaying && 
+        {this.state.videoPlaying && (
+          this.state.videoToPlay ?
           <ReactPlayer
             url={this.state.videoToPlay ? `https://youtube.com/watch?v=${this.state.videoToPlay}` : null}
             playing={true}
@@ -167,7 +170,17 @@ export default class App extends Component {
             controls={true}
             onEnded={() => this.getVideo()}
           />
-        }
+          :
+          <div style={{
+            height: 300,
+            width: 500,
+            backgroundColor: 'rgba(0, 0, 0, 0.1)',
+            margin: this.state.height < 710 ? 10 : 50,
+            marginBottom: this.state.height < 710 ? 20 : 100,
+            maxWidth: this.state.width,
+            borderRadius: 10
+          }} />
+        )}
 
         {this.state.errorText && 
           <p style={styles.error}>{this.state.errorText}</p>
