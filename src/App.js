@@ -16,6 +16,8 @@ let prevGreen2 = 118;
 let prevBlue1 = 113;
 let prevBlue2 = 238;
 
+let gradientStarted = false;
+
 export default class App extends Component {
   state = {
     videoPlaying: false,
@@ -108,7 +110,9 @@ export default class App extends Component {
   getVideo = () => {
     this.setState({ videoPlaying: true });
 
-    if (!this.state.gradientMoving) {
+    if (!gradientStarted) {
+      gradientStarted = true;
+      
       setTimeout(() => {
         this.startNextColor();
         this.setState({ gradientMoving: true })
