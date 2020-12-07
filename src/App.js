@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import DiamondButton from './components/DiamondButton';
-import ReactPlayer from 'react-player'
+import ReactPlayer from 'react-player';
 
 let nextRed1 = 0;
 let nextRed2 = 0;
@@ -32,6 +32,7 @@ export default class App extends Component {
     width: 0,
     height: 0,
     gradientMoving: false,
+    isVideoHidden: false,
   };
 
   getRandomInt(min, max) {
@@ -133,6 +134,15 @@ export default class App extends Component {
   render() {
     const titleFontSize = this.state.width < 600 ? '30px' : '48px';
 
+    document.onkeypress = e => {
+      e = e || window.event;
+
+      if (e.keyCode === 104) { // 104 = h
+        console.log('h press');
+        this.setState({ isVideoHidden: !this.state.isVideoHidden });
+      }
+    };
+
     return (
       <div style={styles.body}>
         <div style={this.state.videoPlaying ?
@@ -169,7 +179,8 @@ export default class App extends Component {
             style={{
               margin: this.state.height < 710 ? 10 : 50,
               marginBottom: this.state.height < 710 ? 20 : 100,
-              maxWidth: this.state.width
+              maxWidth: this.state.width,
+              opacity: this.state.isVideoHidden ? 0.001 : 1.0
             }}
             controls={true}
             onEnded={() => this.getVideo()}
@@ -190,7 +201,7 @@ export default class App extends Component {
           <p style={styles.error}>{this.state.errorText}</p>
         }
         <DiamondButton screenWidth={this.state.width} onClick={() => this.getVideo()}>
-          {this.state.videoPlaying ? 'Discover More' : 'Discover'}
+          {this.state.videoPlaying ? 'More Noise' : 'Create Noise'}
         </DiamondButton>
       </div>
     );
